@@ -3,19 +3,28 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Azure.KeyVault;
 using Vehicles_API.Data;
 using Vehicles_API.Helpers;
 using Vehicles_API.Interfaces;
 using Vehicles_API.Repositories;
+using Microsoft.Azure.Services.AppAuthentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 // Skapa databas koppling...
-builder.Services.AddDbContext<VehicleContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
-);
+var secretUri = builder.Configuration.GetSection("KeyVaultSecrets:SqlConnection").Value;
+var keyVaultToken = new AzureServiceTokenProvider().KeyVaultTokenCallback;
+var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(keyVaultToken));
+var secret = await keyVaultClient.GetSecretAsync(secretUri);
+
+builder.Services.AddDbContext<VehicleContext>(options => options.UseSqlServer(secret.Value));
+
+// builder.Services.AddDbContext<VehicleContext>(options =>
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
+// );
 
 // Sätt upp Identity hanteringen.
 // builder.Services.AddIdentity<IdentityUser, IdentityRole>(

@@ -1,14 +1,12 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Azure.KeyVault;
 using Vehicles_API.Data;
 using Vehicles_API.Helpers;
 using Vehicles_API.Interfaces;
 using Vehicles_API.Repositories;
 using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,7 +70,21 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => {
+  var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+  options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFile));
+});
+// builder.Services.AddSwaggerGen();
+// builder.Services.AddSwaggerGen(options => {
+//   options.SwaggerDoc("V2", new OpenApiInfo{
+//     Version = "V2",
+//     Title = "Vehicles API",
+//     Description = "Hanterar bilar och inloggningar för Westcoast Cars",
+//     Contact = new OpenApiContact{
+//       Name = "Michael Trötter",
+//     }
+//   });
+// });
 
 //Regler för vilka avsändare som får lov att komma in hos oss...
 builder.Services.AddCors(options =>

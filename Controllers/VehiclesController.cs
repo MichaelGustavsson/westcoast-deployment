@@ -22,7 +22,13 @@ namespace Vehicles_API.Controllers
     }
 
     //Skapa en endpoint som lyssnar efter url anrop api/v1/vehicles/list
+    /// <summary>
+    /// Returnera en lista av bilar i lager
+    /// </summary>
     [HttpGet("list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Produces("application/json")]    
     public async Task<ActionResult<List<VehicleViewModel>>> ListVehicles()
     {
       // Anropa metoden ListAllVehiclesAsync i vårt repository.
@@ -48,7 +54,16 @@ namespace Vehicles_API.Controllers
     // }
 
     // Skapa en endpoint som lyssnar efter url anrop api/v1/vehicles/id
-    [HttpGet("{id}")]    
+    /// <summary>
+    /// Returnera en bil med hjälp av ett id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Returnerar ett json objekt enligt spec med en bil</returns>
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Produces("application/json")]    
     public async Task<ActionResult<VehicleViewModel>> GetVehicleById(int id)
     {
       // Anropa metoden GetVehiclesAsync i vårt repository
@@ -95,6 +110,22 @@ namespace Vehicles_API.Controllers
 
     // Skapa en endpoint som lyssnar på POST anrop för att lägga till en ny bil/fordon.
     // Metoden tar som argument en instans av Vy modellen PostVehicleViewModel
+    /// <summary>
+    /// Lägger till en ny bil med ett json objekt.
+    /// </summary>
+    /// <remarks>
+    /// Exempel anrop:
+    /// POST /api/v1/vehicles
+    /// {
+      /// "make": "Volvo"
+    /// }
+    /// </remarks>
+    /// <returns>Returnerar ett json objekt enligt spec med en bil</returns>
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Consumes("application/json")]    
     [HttpPost()]
     public async Task<ActionResult> AddVehicle(PostVehicleViewModel model)
     {

@@ -20,11 +20,11 @@ var keyVaultToken = new AzureServiceTokenProvider().KeyVaultTokenCallback;
 var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(keyVaultToken));
 var secret = await keyVaultClient.GetSecretAsync(secretUri);
 
-builder.Services.AddDbContext<VehicleContext>(options => options.UseSqlServer(secret.Value));
+// builder.Services.AddDbContext<VehicleContext>(options => options.UseSqlServer(secret.Value));
 
-// builder.Services.AddDbContext<VehicleContext>(options =>
-//     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
-// );
+builder.Services.AddDbContext<VehicleContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
+);
 
 // Sätt upp Identity hanteringen.
 // builder.Services.AddIdentity<IdentityUser, IdentityRole>(

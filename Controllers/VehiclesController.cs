@@ -23,7 +23,6 @@ namespace Vehicles_API.Controllers
 
     //Skapa en endpoint som lyssnar efter url anrop api/v1/vehicles/list
     [HttpGet("list")]
-    [Authorize()]
     public async Task<ActionResult<List<VehicleViewModel>>> ListVehicles()
     {
       // Anropa metoden ListAllVehiclesAsync i vårt repository.

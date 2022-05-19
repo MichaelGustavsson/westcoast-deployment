@@ -14,43 +14,43 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Skapa databas koppling...
 builder.Services.AddDbContext<VehicleContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
 );
 
 // Sätt upp Identity hanteringen.
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(
-  options =>
-    {
-      options.Password.RequireLowercase = true;
-      options.Password.RequireUppercase = true;
-      options.Password.RequiredLength = 6;
-      options.Password.RequireNonAlphanumeric = false;
+// builder.Services.AddIdentity<IdentityUser, IdentityRole>(
+//   options =>
+//     {
+//       options.Password.RequireLowercase = true;
+//       options.Password.RequireUppercase = true;
+//       options.Password.RequiredLength = 6;
+//       options.Password.RequireNonAlphanumeric = false;
 
-      options.User.RequireUniqueEmail = true;
+//       options.User.RequireUniqueEmail = true;
 
-      options.Lockout.MaxFailedAccessAttempts = 5;
-      options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-    }
-).AddEntityFrameworkStores<VehicleContext>();
+//       options.Lockout.MaxFailedAccessAttempts = 5;
+//       options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+//     }
+// ).AddEntityFrameworkStores<VehicleContext>();
 
-builder.Services.AddAuthentication(options =>
-{
-  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-  options.TokenValidationParameters = new TokenValidationParameters
-  {
-    ValidateIssuerSigningKey = true,
-    IssuerSigningKey = new SymmetricSecurityKey(
-          Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("apiKey"))
-      ),
-    ValidateLifetime = true,
-    ValidateAudience = false,
-    ValidateIssuer = false,
-    ClockSkew = TimeSpan.Zero
-  };
-});
+// builder.Services.AddAuthentication(options =>
+// {
+//   options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//   options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+// }).AddJwtBearer(options =>
+// {
+//   options.TokenValidationParameters = new TokenValidationParameters
+//   {
+//     ValidateIssuerSigningKey = true,
+//     IssuerSigningKey = new SymmetricSecurityKey(
+//           Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("apiKey"))
+//       ),
+//     ValidateLifetime = true,
+//     ValidateAudience = false,
+//     ValidateIssuer = false,
+//     ClockSkew = TimeSpan.Zero
+//   };
+// });
 
 // Depency injection för våra egna Interface och klasser...
 // builder.Services.AddScoped<Interface, konkret klass som implementerar föregånde interface>...
@@ -93,7 +93,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("WestcoastCors");
 
-app.UseAuthentication();
+// app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

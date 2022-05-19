@@ -4,7 +4,7 @@ using Vehicles_API.Models;
 
 namespace Vehicles_API.Data
 {
-  public class VehicleContext : IdentityDbContext
+  public class VehicleContext : DbContext
   {
     public DbSet<Vehicle> Vehicles => Set<Vehicle>(); // Steg 2. Mappa minnesrepresentationen av vårt fordon till databas.
     public DbSet<Manufacturer> Manufacturers => Set<Manufacturer>();

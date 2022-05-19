@@ -75,7 +75,8 @@ builder.Services.AddCors(options =>
       policy.AllowAnyMethod();
       policy.WithOrigins(
         "http://127.0.0.1:5500",
-        "http://localhost:3000");
+        "http://localhost:3000",
+        "https://nice-ground-09e6b2603.1.azurestaticapps.net/");
     }
   );
 });
